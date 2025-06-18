@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #fff;
+    --foreground: #0a0a0a;
+    --primary-color-text:blue;
+    --primary-color:blue;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+  -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+    margin: 0px;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  body {
+    user-select: none;
+  }
+
+  /* Jika ada elemen yang ingin tetap bisa seleksi teks, tambahkan class allow-select */
+  .allow-select {
+    user-select: text !important;
+  }
+}
+
+button{
+  cursor: pointer;
+}
+
+.container{
+  max-width: 100%;
+}
+
+.scrollbar-hide::-webkit-scrollbar{
+  display: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.primary{
+  background: white;
+  color: white;
+}
