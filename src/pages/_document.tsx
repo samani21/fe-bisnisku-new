@@ -47,6 +47,14 @@ export default class MyDocument extends Document {
             rel="stylesheet"
           />
           <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+          <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
+          <title>BisnisKu</title>
+          <meta property="og:title" content={'BisnisKu'} />
+          <meta property="og:image" content={'https://fe-bisnisku-new.vercel.app/logo/logo.png'} />
+          <meta property="og:url" content={'https://fe-bisnisku-new.vercel.app'} />
+          <meta property="og:type" content="website" />
         </Head>
         <body>
           <Main />

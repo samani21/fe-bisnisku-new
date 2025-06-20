@@ -15,6 +15,8 @@ export const theme = {
         seuccess: '#27AE60',
         hover: '#3498DB',
         button: '#8E44AD',
+        enable: "#FBBF24",
+        disable: "#3B82F6 ",
     },
     radius: '8px',
     transition: 'all 0.2s ease-in-out',
