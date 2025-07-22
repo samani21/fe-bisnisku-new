@@ -1,25 +1,18 @@
 'use client'
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
     return (
-        <>
-            <div className="bg-blue-100 md:bg-gray-100 min-h-screen flex md:items-center justify-center md:px-4">
-                <div className="max-w-5xl w-full bg-white shadow-xl rounded-2xl overflow-hidden grid md:grid-cols-2">
+        <div className="w-screen h-screen grid grid-cols-1 md:grid-cols-2">
+            {/* Left side - Login Form */}
+            {children}
 
-                    {/* Ilustrasi */}
-                    <div className="md:flex items-center justify-center bg-blue-100 p-6">
-                        <img
-                            src="/image/auth.png"
-                            alt="Ilustrasi Login"
-                            width={400}
-                            height={400}
-                            className="object-cover rounded-xl"
-                        />
-                    </div>
-
-                    {/* Form Login */}
-                    {children}
-                </div>
+            {/* Right side - Illustration */}
+            <div className="hidden md:flex items-center justify-center h-screen p-4 bg-[#F4F7FA]">
+                <img
+                    src="/image/image_auth.png"
+                    alt="Login Illustration"
+                    className="w-full h-full object-contain rounded-lg"
+                />
             </div>
-        </>
+        </div>
     );
 }

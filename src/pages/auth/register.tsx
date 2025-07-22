@@ -1,180 +1,158 @@
-import React, { useState } from 'react'
-import AuthLayout from '../layouts/AuthLayout'
-import { theme } from '@/styles/theme'
-import { useRouter } from 'next/router'
+import React, { useState } from 'react';
+import AuthLayout from '../layouts/AuthLayout';
+import { Eye, EyeOff } from 'lucide-react';
 
-const RegisterPage = () => {
+export default function RegisterPage() {
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState(''); // <-- Tambah state no hp
     const [password, setPassword] = useState('');
-    const [passwordError, setPasswordError] = useState('');
-    const router = useRouter();
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [confirmPasswordError, setConfirmPasswordError] = useState('');
-    const validatePassword = (value: string) => {
-        const hasMinLength = value.length >= 8;
-        const hasCapital = /[A-Z]/.test(value);
-        const hasSymbol = /[^A-Za-z0-9]/.test(value);
+    const [showPassword, setShowPassword] = useState(false);
+    const [errors, setErrors] = useState<{
+        name?: string;
+        email?: string;
+        phone?: string;
+        password?: string;
+        confirmPassword?: string;
+    }>({});
 
-        if (!hasMinLength || !hasCapital || !hasSymbol) {
-            setPasswordError('Password harus minimal 8 karakter, mengandung huruf kapital dan simbol.');
-        } else {
-            setPasswordError('');
-        }
+    const validateEmail = (email: string) =>
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+    const validatePhone = (phone: string) => {
+        const cleaned = phone.replace(/\D/g, ''); // hanya angka
+        return cleaned.length >= 11 && cleaned.startsWith('62');
     };
-    const validateConfirmPassword = (value: string) => {
-        if (value !== password) {
-            setConfirmPasswordError('Konfirmasi password tidak cocok.');
-        } else {
-            setConfirmPasswordError('');
+
+    const formatPhone = (value: string) => {
+        let cleaned = value.replace(/\D/g, '');
+
+        if (cleaned.startsWith('0')) {
+            cleaned = '62' + cleaned.slice(1);
+        } else if (cleaned.startsWith('62')) {
+            // ok
+        } else if (cleaned.startsWith('8')) {
+            cleaned = '62' + cleaned;
         }
+
+        return `(+${cleaned.slice(0, 2)})${cleaned.slice(2)}`;
     };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        const newErrors: typeof errors = {};
 
-        validatePassword(password);
-        validateConfirmPassword(confirmPassword);
+        if (!name.trim()) newErrors.name = 'Nama tidak boleh kosong';
+        if (!email.trim()) newErrors.email = 'Email tidak boleh kosong';
+        else if (!validateEmail(email)) newErrors.email = 'Format email tidak valid';
 
-        if (passwordError || confirmPasswordError) return;
+        if (!phone.trim()) newErrors.phone = 'Nomor HP tidak boleh kosong';
+        else if (!validatePhone(phone)) newErrors.phone = 'Nomor HP tidak valid';
 
-        // Proses submit jika valid
-        console.log("Submit sukses!");
+        if (!password) newErrors.password = 'Password tidak boleh kosong';
+        if (!confirmPassword) newErrors.confirmPassword = 'Konfirmasi password wajib diisi';
+        else if (password !== confirmPassword)
+            newErrors.confirmPassword = 'Password tidak cocok';
+
+        setErrors(newErrors);
+
+        if (Object.keys(newErrors).length === 0) {
+            console.log({ name, email, phone, password });
+            // Kirim data ke backend
+        }
     };
-
 
     return (
         <AuthLayout>
-            <div className="p-8 md:p-12">
-                <h2 className="text-3xl font-bold text-gray-800 text-center mb-6">Daftar Akun <span style={{ color: theme?.colors?.secondary }}>BisnisKu</span></h2>
-                <p className="text-center text-sm text-gray-600 mb-6">
-                    Sudah punya akun Bisnisku?{' '}
-                    <button
-                        type="button"
-                        className="text-indigo-600 underline hover:text-indigo-800"
-                        onClick={() => router.push('/auth/login')}
-                    >
-                        Login
-                    </button>
-                </p>
-                <form className="space-y-6" onSubmit={handleSubmit}>
-                    <div className="relative">
+            <div className="flex flex-col justify-center px-10 md:px-20">
+                <h2 className="text-4xl font-bold text-[#1E3A8A] mb-2">Daftar Akun Baru</h2>
+                <p className="text-gray-600 mb-8">Buat akunmu dan mulai bisnis kamu!</p>
+
+                <form onSubmit={handleSubmit} className="space-y-5">
+                    {/* Nama */}
+                    <div>
                         <input
-                            type="name"
-                            id="name"
-                            name="name"
-                            required
-                            placeholder=" "
-                            className="peer w-full px-4 pt-5 pb-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+                            type="text"
+                            placeholder="Nama Lengkap"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            className={`w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 ${errors.name ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#1E3A8A]'}`}
                         />
-                        <label
-                            htmlFor="name"
-                            className="absolute text-sm duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2
-                        peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 
-                        peer-placeholder-shown:text-gray-400 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                        >
-                            Nama
-                        </label>
+                        {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
                     </div>
-                    <div className="relative">
-                        <input
-                            type="whatsapp"
-                            id="whatsapp"
-                            name="whatsapp"
-                            required
-                            placeholder=" "
-                            className="peer w-full px-4 pt-5 pb-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-                        />
-                        <label
-                            htmlFor="whatsapp"
-                            className="absolute text-sm duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2
-                        peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 
-                        peer-placeholder-shown:text-gray-400 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                        >
-                            Whatsapp
-                        </label>
-                    </div>
-                    <div className="relative">
+
+                    {/* Email */}
+                    <div>
                         <input
                             type="email"
-                            id="email"
-                            name="email"
-                            required
-                            placeholder=" "
-                            className="peer w-full px-4 pt-5 pb-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+                            placeholder="Email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className={`w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 ${errors.email ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#1E3A8A]'}`}
                         />
-                        <label
-                            htmlFor="email"
-                            className="absolute text-sm duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2
-                        peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 
-                        peer-placeholder-shown:text-gray-400 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                        >
-                            Email
-                        </label>
+                        {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
                     </div>
+
+                    {/* No HP */}
+                    <div>
+                        <input
+                            type="tel"
+                            placeholder="Nomor HP (misal 08123456789)"
+                            value={phone}
+                            onChange={(e) => setPhone(formatPhone(e.target.value))}
+                            className={`w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 ${errors.phone ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#1E3A8A]'}`}
+                        />
+                        {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
+                    </div>
+
+                    {/* Password */}
                     <div className="relative">
                         <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            required
+                            type={showPassword ? 'text' : 'password'}
+                            placeholder="Password"
                             value={password}
-                            onChange={(e) => {
-                                setPassword(e.target.value);
-                                validatePassword(e.target.value);
-                            }}
-                            placeholder=" "
-                            className="peer w-full px-4 pt-5 pb-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+                            onChange={(e) => setPassword(e.target.value)}
+                            className={`w-full px-4 py-3 pr-10 border rounded-md focus:outline-none focus:ring-2 ${errors.password ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#1E3A8A]'}`}
                         />
-                        <label
-                            htmlFor="password"
-                            className="absolute text-sm duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2
-    peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 
-    peer-placeholder-shown:text-gray-400 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                         >
-                            Password
-                        </label>
-                        {passwordError && (
-                            <p className="mt-1 text-sm text-red-500">{passwordError}</p>
-                        )}
+                            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                        </button>
+                        {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
                     </div>
 
-                    <div className="relative">
+                    {/* Konfirmasi Password */}
+                    <div>
                         <input
-                            type="password"
-                            id="confirmPassword"
-                            name="confirmPassword"
-                            required
+                            type={showPassword ? 'text' : 'password'}
+                            placeholder="Konfirmasi Password"
                             value={confirmPassword}
-                            onChange={(e) => {
-                                setConfirmPassword(e.target.value);
-                                validateConfirmPassword(e.target.value);
-                            }}
-                            placeholder=" "
-                            className="peer w-full px-4 pt-5 pb-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            className={`w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 ${errors.confirmPassword ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#1E3A8A]'}`}
                         />
-                        <label
-                            htmlFor="confirmPassword"
-                            className="absolute text-sm duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2
-        peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 
-        peer-placeholder-shown:text-gray-400 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                        >
-                            Konfirmasi Password
-                        </label>
-                        {confirmPasswordError && (
-                            <p className="mt-1 text-sm text-red-500">{confirmPasswordError}</p>
+                        {errors.confirmPassword && (
+                            <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>
                         )}
                     </div>
 
-                    {/* Tombol Login */}
+                    {/* Submit */}
                     <button
                         type="submit"
-                        className="w-full bg-blue-600 text-white py-2 rounded-xl font-semibold hover:bg-blue-700 transition"
+                        className="w-full bg-[#1E3A8A] hover:bg-[#C78A00] text-white font-semibold py-3 rounded-md transition duration-200"
                     >
                         Daftar
                     </button>
                 </form>
+
+                <p className="mt-6 text-sm text-gray-500">
+                    Sudah punya akun?{' '}
+                    <span onClick={() => window.location.href = '/auth/login'} className="text-[#1E3A8A] hover:underline cursor-pointer">Masuk</span>
+                </p>
             </div>
         </AuthLayout>
-    )
+    );
 }
-
-export default RegisterPage

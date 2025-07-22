@@ -1,72 +1,92 @@
-import React from 'react'
-import AuthLayout from '../layouts/AuthLayout'
-import { theme } from '@/styles/theme'
-import { useRouter } from 'next/router'
+import React, { useState } from 'react';
+import AuthLayout from '../layouts/AuthLayout';
+import { Eye, EyeOff } from 'lucide-react';
 
-const LoginPage = () => {
-    const router = useRouter();
+export default function LoginPage() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [rememberMe, setRememberMe] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        const newErrors: typeof errors = {};
+
+        if (!email.trim()) newErrors.email = 'Email tidak boleh kosong';
+        if (!password.trim()) newErrors.password = 'Password tidak boleh kosong';
+
+        setErrors(newErrors);
+
+        if (Object.keys(newErrors).length === 0) {
+            // Lakukan login
+            console.log({ email, password, rememberMe });
+        }
+    };
+
     return (
         <AuthLayout>
-            <div className="p-8 md:p-12">
-                <h2 className="text-3xl font-bold text-gray-800 text-center mb-6">Masuk ke <span style={{ color: theme?.colors?.secondary }}>BisnisKu</span></h2>
+            <div className="flex flex-col justify-center px-10 md:px-20">
+                <h2 className="text-4xl font-bold text-[#1E3A8A] mb-2">Halo, Selamat Datang Kembali</h2>
+                <p className="text-gray-600 mb-8">Hai, selamat datang kembali di bisnisku</p>
 
-                <form className="space-y-6">
-                    <div className="relative">
+                <form onSubmit={handleSubmit} className="space-y-5">
+                    <div>
                         <input
                             type="email"
-                            id="email"
-                            name="email"
-                            required
-                            placeholder=" "
-                            className="peer w-full px-4 pt-5 pb-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+                            placeholder="Email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className={`w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 ${errors.email ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#1E3A8A]'
+                                }`}
                         />
-                        <label
-                            htmlFor="email"
-                            className="absolute text-sm duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2
-                        peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 
-                        peer-placeholder-shown:text-gray-400 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                        >
-                            Email
-                        </label>
-                    </div>
-                    <div className="relative">
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            required
-                            placeholder=" "
-                            className="peer w-full px-4 pt-5 pb-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-                        />
-                        <label
-                            htmlFor="password"
-                            className="absolute text-sm duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2
-                        peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 
-                        peer-placeholder-shown:text-gray-400 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                        >
-                            Kata Sandi
-                        </label>
+                        {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
                     </div>
 
-                    {/* Tombol Login */}
+                    <div className="relative">
+                        <input
+                            type={showPassword ? 'text' : 'password'}
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className={`w-full px-4 py-3 pr-10 border rounded-md focus:outline-none focus:ring-2 ${errors.password ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#1E3A8A]'
+                                }`}
+                        />
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                        >
+                            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                        </button>
+                        {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+                    </div>
+
+                    <div className="flex items-center justify-between text-sm text-gray-500">
+                        <label className="flex items-center">
+                            <input
+                                type="checkbox"
+                                checked={rememberMe}
+                                onChange={(e) => setRememberMe(e.target.checked)}
+                                className="mr-2"
+                            />
+                            Ingat saya
+                        </label>
+                        <a href="#" className="hover:underline text-[#1E3A8A]">Lupa Kata Sandi?</a>
+                    </div>
+
                     <button
                         type="submit"
-                        className="w-full bg-blue-600 text-white py-2 rounded-xl font-semibold hover:bg-blue-700 transition"
+                        className="w-full bg-[#1E3A8A] hover:bg-[#C78A00] text-white font-semibold py-3 rounded-md transition duration-200"
                     >
                         Masuk
                     </button>
                 </form>
 
-                {/* Teks tambahan */}
-                <p className="text-center text-sm text-gray-600 mt-6">
-                    Belum punya akun?{' '}
-                    <a className="text-blue-600 hover:underline" onClick={() => router.push('/auth/register')}>
-                        Daftar sekarang
-                    </a>
+                <p className="mt-6 text-sm text-gray-500">
+                    Belum punya akun? <span onClick={() => window.location.href = "/auth/register"} className="text-[#1E3A8A] hover:underline cursor-pointer">Daftar</span>
                 </p>
             </div>
         </AuthLayout>
-    )
+    );
 }
-
-export default LoginPage
