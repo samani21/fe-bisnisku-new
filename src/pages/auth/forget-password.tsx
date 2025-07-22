@@ -107,7 +107,7 @@ export default function ForgotPasswordPage() {
                             value={input}
                             onChange={handleChange}
                             disabled={otpVerified}
-                            className={`w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 ${errors ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#1E3A8A]'} ${otpVerified ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                            className={`bg-white w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 ${errors ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#1E3A8A]'} ${otpVerified ? 'bg-gray-100 cursor-not-allowed' : ''}`}
                         />
                         {errors && <p className="text-red-500 text-sm mt-1">{errors}</p>}
                     </div>
@@ -121,7 +121,7 @@ export default function ForgotPasswordPage() {
                                     placeholder="Password Baru"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1E3A8A]"
+                                    className="bg-white w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1E3A8A]"
                                 />
                                 <div
                                     className="absolute right-3 top-3 cursor-pointer text-gray-500"

@@ -75,14 +75,14 @@ export default function RegisterPage() {
                     <div>
                         <input type="text" placeholder="Nama Lengkap" value={name}
                             onChange={(e) => setName(e.target.value)}
-                            className={`w-full px-4 py-3 border rounded-md ${errors.name ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 ${errors.name ? 'focus:ring-red-500' : 'focus:ring-[#1E3A8A]'}`} />
+                            className={`bg-white w-full px-4 py-3 border rounded-md ${errors.name ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 ${errors.name ? 'focus:ring-red-500' : 'focus:ring-[#1E3A8A]'}`} />
                         {errors?.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
                     </div>
 
                     <div>
                         <input type="email" placeholder="Email" value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className={`w-full px-4 py-3 border rounded-md ${errors.email ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 ${errors.email ? 'focus:ring-red-500' : 'focus:ring-[#1E3A8A]'}`} />
+                            className={`bg-white w-full px-4 py-3 border rounded-md ${errors.email ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 ${errors.email ? 'focus:ring-red-500' : 'focus:ring-[#1E3A8A]'}`} />
                         {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
                     </div>
 
@@ -96,7 +96,7 @@ export default function RegisterPage() {
                     <div className="relative">
                         <input type={showPassword ? 'text' : 'password'} placeholder="Password" value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className={`w-full px-4 py-3 pr-10 border rounded-md ${errors.password ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 ${errors.password ? 'focus:ring-red-500' : 'focus:ring-[#1E3A8A]'}`} />
+                            className={`bg-white w-full px-4 py-3 pr-10 border rounded-md ${errors.password ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 ${errors.password ? 'focus:ring-red-500' : 'focus:ring-[#1E3A8A]'}`} />
                         <button type="button" onClick={() => setShowPassword(!showPassword)}
                             className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 hover:text-gray-700">
                             {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -108,7 +108,7 @@ export default function RegisterPage() {
                         <input type={showPassword ? 'text' : 'password'} placeholder="Konfirmasi Password"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
-                            className={`w-full px-4 py-3 border rounded-md ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 ${errors.confirmPassword ? 'focus:ring-red-500' : 'focus:ring-[#1E3A8A]'}`} />
+                            className={`bg-white w-full px-4 py-3 border rounded-md ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 ${errors.confirmPassword ? 'focus:ring-red-500' : 'focus:ring-[#1E3A8A]'}`} />
                         {errors.confirmPassword && <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>}
                     </div>
 
