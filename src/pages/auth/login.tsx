@@ -72,7 +72,7 @@ export default function LoginPage() {
                             />
                             Ingat saya
                         </label>
-                        <a href="#" className="hover:underline text-[#1E3A8A]">Lupa Kata Sandi?</a>
+                        <div className="hover:underline text-[#1E3A8A] cursor-pointer" onClick={() => window.location.href = "/auth/forget-password"}>Lupa Kata Sandi?</div>
                     </div>
 
                     <button
